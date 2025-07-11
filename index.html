@@ -4,20 +4,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Free Store — Simple and clean app discovery site." />
+  <meta name="keywords" content="free store, play store apps, download, tools, offline apps, productivity, app finder" />
+  <meta name="author" content="Free Store Team" />
+  <meta property="og:title" content="Free Store" />
+  <meta property="og:description" content="Find apps easily, clean layout, no clutter." />
+  <meta property="og:image" content="assets/logo.png" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
   <title>Free Store</title>
   <style>
+    :root {
+      --bg: #f4f4f4;
+      --text: #000;
+      --card: #fff;
+      --header: #4CAF50;
+      --btn: #4CAF50;
+      --btn-hover: #45a049;
+    }
+    body.dark {
+      --bg: #1e1e1e;
+      --text: #fff;
+      --card: #2a2a2a;
+    }
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: var(--bg);
+      color: var(--text);
       margin: 0;
       padding: 0;
     }
     header {
-      background-color: #4CAF50;
+      background-color: var(--header);
       color: white;
       text-align: center;
       padding: 1rem;
       font-size: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header img {
+      height: 40px;
+      margin-left: 1rem;
+    }
+    .toggle-dark {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      margin-right: 1rem;
+      cursor: pointer;
     }
     .search-box {
       text-align: center;
@@ -31,6 +67,22 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+    .categories {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .categories button {
+      margin: 0.25rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      background-color: var(--btn);
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .categories button:hover {
+      background-color: var(--btn-hover);
+    }
     .container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -38,7 +90,7 @@
       padding: 1rem;
     }
     .app-card {
-      background: white;
+      background: var(--card);
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       padding: 1rem;
@@ -56,11 +108,11 @@
     }
     .app-meta {
       font-size: 0.9rem;
-      color: #555;
+      color: gray;
       margin-bottom: 0.5rem;
     }
     .install-btn {
-      background-color: #4CAF50;
+      background-color: var(--btn);
       color: white;
       border: none;
       padding: 0.5rem 1rem;
@@ -71,45 +123,89 @@
       display: inline-block;
     }
     .install-btn:hover {
-      background-color: #45a049;
+      background-color: var(--btn-hover);
+    }
+    .ad-placeholder {
+      background: #e0e0e0;
+      color: #666;
+      text-align: center;
+      padding: 1rem;
+      margin: 1rem auto;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+    footer {
+      text-align: center;
+      margin: 2rem auto;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <header>Free Store</header>
+  <header>
+    <img src="assets/logo.png" alt="Logo" />
+    Free Store
+    <button class="toggle-dark" onclick="toggleDarkMode()">🌙</button>
+  </header>
+
   <div class="search-box">
     <input type="text" id="searchInput" placeholder="Search apps...">
   </div>
+
+  <div class="categories">
+    <button onclick="filterCategory('all')">All</button>
+    <button onclick="filterCategory('offline')">Offline</button>
+    <button onclick="filterCategory('online')">Online</button>
+    <button onclick="filterCategory('study')">Study</button>
+    <button onclick="filterCategory('tools')">Tools</button>
+    <button onclick="filterCategory('music')">Music</button>
+  </div>
+
+  <div class="ad-placeholder">Ad Placeholder (728x90)</div>
+
   <div class="container" id="appContainer">
-    <div class="app-card">
+    <div class="app-card" data-category="tools offline">
       <img src="https://play-lh.googleusercontent.com/5oGZ6Rl5KVuH1-KBQnh9NErbr1a8KlTb1lw5yDxjVvTdxr2Fu_5Wigwz6HTRUmNYEj0=w240-h480" alt="App Icon">
       <div class="app-name">Snapseed</div>
       <div class="app-meta">⭐ 4.4 | 📦 30 MB | 🟢 Offline</div>
       <a class="install-btn" href="https://play.google.com/store/apps/details?id=com.niksoftware.snapseed" target="_blank">Install</a>
     </div>
-    <div class="app-card">
+    <div class="app-card" data-category="study online">
       <img src="https://play-lh.googleusercontent.com/7qYi0MBUuN8gA9v7xVPzGzdxlLh8tBh0EqMBZxO9FG5hC-M4jVbIuh_YdrGp1c7aGdc=w240-h480" alt="App Icon">
       <div class="app-name">Forest: Focus Timer</div>
       <div class="app-meta">⭐ 4.7 | 📦 45 MB | 🔴 Online</div>
       <a class="install-btn" href="https://play.google.com/store/apps/details?id=cc.forestapp" target="_blank">Install</a>
     </div>
-    <div class="app-card">
+    <div class="app-card" data-category="tools offline">
       <img src="https://play-lh.googleusercontent.com/0ZXQKnQ_r0rMSsZvn_CnaV-NgO8rdoyC1N3vXW4WrUPbfObUS6FQ9Vemcz7FCuWZTA=w240-h480" alt="App Icon">
       <div class="app-name">WPS Office</div>
       <div class="app-meta">⭐ 4.3 | 📦 55 MB | 🟢 Offline</div>
       <a class="install-btn" href="https://play.google.com/store/apps/details?id=cn.wps.moffice_eng" target="_blank">Install</a>
     </div>
-    <div class="app-card">
+    <div class="app-card" data-category="music online">
       <img src="https://play-lh.googleusercontent.com/gZ1qsk_UYZVGZ-XJYGSPr-jD_egrUENosJcU3Uiz82zzMeWqABrZ4AB5vWRLduhLaSo=w240-h480" alt="App Icon">
       <div class="app-name">JioSaavn Music</div>
       <div class="app-meta">⭐ 4.1 | 📦 32 MB | 🔴 Online</div>
       <a class="install-btn" href="https://play.google.com/store/apps/details?id=com.jio.media.jiobeats" target="_blank">Install</a>
     </div>
   </div>
+
+  <footer>
+    <p><a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Use</a><br>© 2025 Free Store</p>
+  </footer>
+
   <script>
     const searchInput = document.getElementById('searchInput');
     const appCards = document.querySelectorAll('.app-card');
-
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+    function filterCategory(cat) {
+      appCards.forEach(card => {
+        const dataCat = card.getAttribute('data-category');
+        card.style.display = (cat === 'all' || dataCat.includes(cat)) ? 'block' : 'none';
+      });
+    }
     searchInput.addEventListener('input', () => {
       const query = searchInput.value.toLowerCase();
       appCards.forEach(card => {
